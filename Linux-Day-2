@@ -1,1 +1,286 @@
+Week 1 – Day 2 Learning Objectives
 
+By the end of today, you will be able to:
+
+✅ Understand Linux file permissions
+✅ Use chmod to change permissions
+✅ Use chown to change file ownership
+✅ Create and manage users and groups
+✅ Use sudo safely
+✅ Troubleshoot common permission issues
+✅ Answer 3–5 years experience interview questions
+Step 1: Linux Permission Basics
+
+Run:
+
+ls -l
+
+Example output:
+
+-rwxr-xr-- 1 ec2-user ec2-user 1250 Aug 1 12:30 deploy.sh
+
+Let's break it down:
+
+-rwxr-xr--
+Position	Meaning
+-	File (d means directory)
+rwx	Owner permissions
+r-x	Group permissions
+r--	Others permissions
+Step 2: Understand r, w, x
+Permission	Symbol	Value	Meaning
+Read	r	4	View file contents
+Write	w	2	Modify the file
+Execute	x	1	Run the file/program
+
+Example:
+
+rwx = 4 + 2 + 1 = 7
+rw- = 4 + 2 = 6
+r-- = 4
+--- = 0
+Step 3: Numeric Permissions
+Number	Permission
+777	rwxrwxrwx
+755	rwxr-xr-x
+700	rwx------
+644	rw-r--r--
+600	rw-------
+
+Interview Tip:
+
+755 → Scripts and directories
+644 → Configuration files
+600 → Private keys and sensitive files
+
+Step 4: Using chmod
+
+Create a script:
+
+touch deploy.sh
+
+Check permissions:
+
+ls -l deploy.sh
+
+Make it executable:
+
+chmod +x deploy.sh
+
+Or use numeric mode:
+
+chmod 755 deploy.sh
+
+Verify:
+
+ls -l deploy.sh
+Step 5: Symbolic Mode
+
+Add execute permission:
+
+chmod u+x deploy.sh
+
+Remove write permission:
+
+chmod g-w deploy.sh
+
+Remove all permissions for others:
+
+chmod o-rwx deploy.sh
+Symbol	Meaning
+u	User (owner)
+g	Group
+o	Others
+a	All
+Step 6: File Ownership (chown)
+
+Check ownership:
+
+ls -l
+
+Example:
+
+-rwxr-xr-x 1 ec2-user ec2-user deploy.sh
+
+Change owner:
+
+sudo chown jenkins deploy.sh
+
+Change owner and group:
+
+sudo chown jenkins:jenkins deploy.sh
+
+Verify:
+
+ls -l
+Step 7: Users and Groups
+
+Current user:
+
+whoami
+
+Detailed user information:
+
+id
+
+Current groups:
+
+groups
+
+Create a new user:
+
+sudo useradd devops
+
+Set a password:
+
+sudo passwd devops
+
+Create a group:
+
+sudo groupadd developers
+
+Add the user to the group:
+
+sudo usermod -aG developers devops
+
+Verify:
+
+id devops
+
+Step 8: Understanding sudo
+
+sudo lets a permitted user run commands with administrative privileges.
+
+Example:
+
+sudo systemctl restart sshd
+
+Without sudo, many system-level commands will fail with:
+
+Permission denied
+
+or
+
+Operation not permitted
+Real-Time Production Scenario 1
+Jenkins cannot execute a deployment script
+
+Error:
+
+Permission denied
+
+Check permissions:
+
+ls -l deploy.sh
+
+Output:
+
+-rw-r--r--
+
+The file is not executable.
+
+Fix:
+
+chmod +x deploy.sh
+Real-Time Production Scenario 2
+Jenkins cannot write to a directory
+
+Error:
+
+mkdir: cannot create directory: Permission denied
+
+Check:
+
+ls -ld /opt/application
+
+If the directory belongs to root but Jenkins runs as jenkins, Jenkins may not have write access.
+
+Fix (choose the appropriate solution for your environment):
+
+sudo chown -R jenkins:jenkins /opt/application
+
+or adjust permissions carefully with chmod if ownership should not change.
+Real-Time Production Scenario 3
+SSH private key rejected
+
+Error:
+
+Permissions 0644 for 'id_rsa' are too open.
+
+Fix:
+
+chmod 600 ~/.ssh/id_rsa
+
+This is a very common interview and production question.
+Hands-on Lab
+
+Complete these tasks:
+
+Create a directory:
+mkdir linux-lab
+Create a file:
+touch deploy.sh
+Give execute permission:
+chmod 755 deploy.sh
+Verify:
+ls -l deploy.sh
+Display your user details:
+whoami
+id
+groups
+If you have sudo access, create a user:
+sudo useradd testuser
+Verify:
+id testuser
+Interview Questions (3–5 Years)
+Q1. What do 755 and 644 mean?
+
+Answer:
+
+755 → Owner: read, write, execute; Group: read, execute; Others: read, execute.
+644 → Owner: read, write; Group: read; Others: read.
+Q2. What is the difference between chmod and chown?
+
+Answer:
+
+chmod changes permissions.
+chown changes the owner and/or group of a file or directory.
+Q3. Why is chmod 777 considered risky?
+
+Answer:
+It gives read, write, and execute permissions to everyone, which can create security risks. Use it only for temporary troubleshooting and only when appropriate. Prefer the least-privilege permissions needed.
+
+Q4. How do you check which user is running a Jenkins build?
+
+Answer:
+
+ps -ef | grep jenkins
+
+or
+
+systemctl status jenkins
+
+You can also inspect the Jenkins service configuration to see which user the service runs as.
+
+Q5. A script gives "Permission denied." What do you check first?
+Is it executable?
+ls -l script.sh
+If needed:
+chmod +x script.sh
+Verify the file owner and the user running the script.
+Ensure the filesystem isn't mounted with the noexec option (a less common but important production issue).
+Homework
+
+Practice these commands until you can use them confidently:
+
+ls -l
+chmod
+chown
+whoami
+id
+groups
+useradd
+groupadd
+usermod
+passwd
+sudo

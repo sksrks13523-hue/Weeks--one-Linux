@@ -1,0 +1,171 @@
+What is Linux?
+
+Linux is an open-source operating system widely used for:
+
+AWS EC2
+Azure Virtual Machines
+Google Cloud
+Jenkins servers
+Docker hosts
+Kubernetes nodes
+
+Interview Question:
+
+Q: Why do most companies use Linux servers?
+
+Answer: Linux is stable, secure, lightweight, highly customizable, and performs well for enterprise workloads. Most cloud platforms and DevOps tools run on Linux.
+Step 2: Connect to Your Linux Server
+
+If using AWS EC2:
+
+ssh -i my-key.pem ec2-user@<public-ip>
+
+Verify you're logged in:
+
+whoami
+
+Expected output:
+
+ec2-user
+Step 3: Check System Information
+hostname
+
+Shows the server name.
+
+pwd
+
+Shows your current directory.
+
+date
+
+Shows the current date and time.
+
+uptime
+
+Shows how long the server has been running and its load.
+Step 4: Understand the Linux Directory Structure
+
+Important directories:
+
+Directory	Purpose
+/	Root directory
+/home	User home directories
+/etc	Configuration files
+/var	Logs and application data
+/tmp	Temporary files
+/usr	Installed software
+/opt	Optional applications
+/bin	Essential commands
+/sbin	System administration commands
+Step 5: Navigate Directories
+pwd
+ls
+ls -l
+ls -la
+cd /etc
+cd ~
+cd ..
+cd /
+
+Practice these until you can move around without hesitation.
+Step 6: Create Directories
+mkdir devops
+mkdir project
+
+Create nested directories:
+
+mkdir -p training/day1/linux
+
+Check:
+
+tree training
+
+If tree is unavailable:
+
+find training
+
+Step 7: Create Files
+touch file1.txt
+touch file2.txt
+
+Create multiple files:
+
+touch app.log notes.txt test.sh
+Step 8: View File Contents
+
+Write text:
+
+echo "Hello Linux" > file1.txt
+
+View the file:
+
+cat file1.txt
+
+Also practice:
+
+less file1.txt
+head file1.txt
+tail file1.txt
+
+Step 9: Copy, Move, Rename, Delete
+
+Copy:
+
+cp file1.txt backup.txt
+
+Rename:
+
+mv backup.txt backup-old.txt
+
+Move:
+
+mv backup-old.txt training/
+
+Delete:
+
+rm file2.txt
+
+Delete directory:
+
+rm -r project
+Step 10: Search Files
+find . -name "*.txt"
+find /etc -name hosts
+Real-Time Scenario
+
+A developer says:
+
+"My application configuration file is missing."
+
+As a Linux administrator, you might:
+
+Find the configuration file:
+
+find / -name application.properties
+
+Check permissions:
+
+ls -l application.properties
+
+Verify the contents:
+
+cat application.properties
+Restore or replace the file if needed.
+Practice Lab
+
+Complete these tasks:
+
+Create a directory named devops-lab.
+Inside it, create:
+scripts
+logs
+config
+Create files:
+deploy.sh
+app.log
+config.yml
+Add sample content using echo.
+Copy config.yml into the scripts directory.
+Rename app.log to application.log.
+Search for all .sh files.
+Delete the logs directory.

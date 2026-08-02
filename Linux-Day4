@@ -1,0 +1,269 @@
+Week 1 – Day 4 Learning Objectives
+
+By the end of today, you will be able to:
+
+✅ Install, update, and remove software packages
+✅ Understand dnf, yum, and rpm
+✅ Download files from the internet
+✅ Check network connectivity
+✅ Verify open ports
+✅ Troubleshoot network problems
+✅ Answer interview questions confidently
+Step 1: What is Package Management?
+
+A package manager installs, updates, and removes software.
+
+Examples:
+
+Java
+Git
+Jenkins
+Maven
+Docker
+Nginx
+
+Think of it like an app store for Linux.
+
+Step 2: Understand dnf, yum, and rpm
+Command	Purpose	Common Use
+dnf	Modern package manager	Amazon Linux 2023, RHEL 8+, Fedora
+yum	Older package manager	Amazon Linux 2, CentOS 7, RHEL 7
+rpm	Install/query individual RPM packages	Manual package management
+Step 3: Check Your Operating System
+cat /etc/os-release
+
+Example output:
+
+NAME="Amazon Linux"
+VERSION="2023"
+
+If you're using Amazon Linux 2023, use dnf.
+
+If you're using Amazon Linux 2, use yum.
+
+Step 4: Install Software Using dnf
+
+Search for a package:
+
+dnf search git
+
+Install Git:
+
+sudo dnf install git -y
+
+Check the version:
+
+git --version
+Step 5: Update Packages
+
+Update package information:
+
+sudo dnf check-update
+
+Upgrade installed packages:
+
+sudo dnf upgrade -y
+Step 6: Remove a Package
+sudo dnf remove git -y
+
+Reinstall if needed:
+
+sudo dnf install git -y
+Step 7: Using yum (Amazon Linux 2)
+
+If your server is Amazon Linux 2:
+
+sudo yum install git -y
+
+Other useful commands:
+
+sudo yum update -y
+sudo yum remove git -y
+yum search java
+Step 8: Working with RPM Packages
+
+Check installed packages:
+
+rpm -qa
+
+Search:
+
+rpm -qa | grep java
+
+Show package details:
+
+rpm -qi git
+
+List files installed by a package:
+
+rpm -ql git
+
+Install a local RPM:
+
+sudo rpm -ivh package.rpm
+
+Note: dnf/yum are usually preferred because they automatically install dependencies, while rpm alone does not.
+
+Step 9: Network Connectivity Commands
+Check connectivity
+ping google.com
+
+Stop with:
+
+Ctrl + C
+Download a file
+
+Using wget:
+
+wget https://example.com/file.txt
+
+Using curl:
+
+curl https://example.com
+
+Download and save a file:
+
+curl -O https://example.com/file.txt
+Step 10: Check IP Address
+ip addr
+
+Show only IPv4 addresses:
+
+ip -4 addr
+Step 11: Check Routing Table
+ip route
+
+This shows the default gateway and network routes.
+
+Step 12: Check Open Ports
+
+Show listening TCP and UDP ports:
+
+ss -tuln
+
+Find a specific port:
+
+ss -tuln | grep 8080
+
+For Jenkins (default port 8080), this tells you whether Jenkins is listening.
+
+Step 13: Test Connectivity to a Port
+
+If nc (netcat) is installed:
+
+nc -zv localhost 8080
+
+Or use curl for web services:
+
+curl http://localhost:8080
+Real-Time Production Scenario 1
+Jenkins installation fails
+
+Error: Package not found.
+
+Troubleshooting
+Check internet connectivity:
+ping google.com
+Refresh package metadata:
+sudo dnf check-update
+Verify repositories are enabled.
+Real-Time Production Scenario 2
+Jenkins UI is not accessible
+
+Check if Jenkins is running:
+
+systemctl status jenkins
+
+Check if port 8080 is listening:
+
+ss -tuln | grep 8080
+
+If the service is running but the port isn't accessible:
+
+Check the firewall.
+Check the cloud security group (AWS/Azure/GCP).
+Confirm Jenkins is configured to listen on the expected port.
+Real-Time Production Scenario 3
+Cannot clone a GitHub repository
+
+Check internet access:
+
+ping github.com
+
+Test HTTPS:
+
+curl -I https://github.com
+
+If HTTPS works but Git fails, investigate:
+
+Git credentials or SSH keys.
+Proxy settings (if applicable).
+Repository permissions.
+Hands-on Lab
+
+Complete these tasks:
+
+Identify your operating system:
+cat /etc/os-release
+Check Git version:
+git --version
+Search for Git:
+dnf search git
+
+(or yum search git if using Amazon Linux 2)
+
+Display your IP address:
+ip addr
+Display the routing table:
+ip route
+Test internet connectivity:
+ping -c 4 google.com
+Download a sample file:
+wget https://example.com
+List open ports:
+ss -tuln
+Check whether port 22 (SSH) is listening:
+ss -tuln | grep :22
+Interview Questions
+Q1. What is the difference between dnf, yum, and rpm?
+
+Answer:
+
+dnf is the newer package manager.
+yum is the older package manager.
+rpm manages individual RPM files and does not automatically resolve dependencies.
+Q2. How do you check your Linux version?
+cat /etc/os-release
+Q3. How do you check whether Jenkins is listening on port 8080?
+ss -tuln | grep 8080
+Q4. How do you troubleshoot a server that cannot access GitHub?
+
+A good troubleshooting sequence:
+
+Check IP configuration (ip addr).
+Verify the default route (ip route).
+Test connectivity (ping github.com if ICMP is allowed).
+Test HTTPS (curl -I https://github.com).
+Verify DNS resolution and firewall/security group rules if needed.
+Q5. Why is dnf preferred over rpm?
+
+Because dnf automatically resolves and installs package dependencies, making installations more reliable and easier to manage.
+
+Homework
+
+Practice these commands until you're comfortable with them:
+
+cat /etc/os-release
+dnf search
+dnf install
+dnf remove
+dnf upgrade
+rpm -qa
+rpm -qi
+rpm -ql
+ping
+curl
+wget
+ip addr
+ip route
+ss -tuln

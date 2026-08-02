@@ -1,0 +1,212 @@
+Week 1 Mini Project: Linux Server Health Check
+Project Goal
+
+Create a script that:
+
+✅ Displays the hostname
+✅ Displays uptime
+✅ Shows CPU usage
+✅ Shows memory usage
+✅ Shows disk usage
+✅ Checks whether Jenkins is running
+✅ Saves the report with a timestamp
+✅ Returns exit code 0 if all checks pass, or a non-zero exit code if Jenkins is not running
+Step 1: Create a Project Directory
+mkdir ~/mini-project
+cd ~/mini-project
+
+Verify:
+
+pwd
+
+Example output:
+
+/home/ec2-user/mini-project
+Step 2: Create the Script
+touch health-check.sh
+
+Verify:
+
+ls -l
+Step 3: Edit the Script
+
+Open it with your preferred editor:
+
+vi health-check.sh
+
+Paste the following script:
+
+#!/bin/bash
+
+# Log file name with timestamp
+LOGFILE="health_report_$(date +%Y%m%d_%H%M%S).log"
+
+echo "==========================================" | tee -a "$LOGFILE"
+echo " Linux Server Health Check Report" | tee -a "$LOGFILE"
+echo "==========================================" | tee -a "$LOGFILE"
+
+echo "Date: $(date)" | tee -a "$LOGFILE"
+
+echo ""
+echo "Hostname:" | tee -a "$LOGFILE"
+hostname | tee -a "$LOGFILE"
+
+echo ""
+echo "Uptime:" | tee -a "$LOGFILE"
+uptime | tee -a "$LOGFILE"
+
+echo ""
+echo "CPU Load:" | tee -a "$LOGFILE"
+uptime | tee -a "$LOGFILE"
+
+echo ""
+echo "Memory Usage:" | tee -a "$LOGFILE"
+free -h | tee -a "$LOGFILE"
+
+echo ""
+echo "Disk Usage:" | tee -a "$LOGFILE"
+df -h | tee -a "$LOGFILE"
+
+echo ""
+echo "Checking Jenkins Service..." | tee -a "$LOGFILE"
+
+if systemctl is-active --quiet jenkins
+then
+    echo "Jenkins Service: RUNNING" | tee -a "$LOGFILE"
+    EXIT_CODE=0
+else
+    echo "Jenkins Service: NOT RUNNING" | tee -a "$LOGFILE"
+    EXIT_CODE=1
+fi
+
+echo ""
+echo "Top 5 CPU Processes:" | tee -a "$LOGFILE"
+ps -eo pid,comm,%cpu --sort=-%cpu | head -6 | tee -a "$LOGFILE"
+
+echo ""
+echo "Health check completed." | tee -a "$LOGFILE"
+echo "Report saved to: $LOGFILE"
+
+exit $EXIT_CODE
+Step 4: Make the Script Executable
+chmod +x health-check.sh
+
+Verify:
+
+ls -l health-check.sh
+
+You should see an x in the permissions, for example:
+
+-rwxr-xr-x
+Step 5: Run the Script
+./health-check.sh
+
+Example output:
+
+==========================================
+Linux Server Health Check Report
+==========================================
+
+Date: Sun Aug 2 22:30:00 IST 2026
+
+Hostname:
+ip-172-31-10-20
+
+Uptime:
+22:30:15 up 3 days,  2 users,  load average: 0.10, 0.05, 0.01
+
+Memory Usage:
+...
+
+Disk Usage:
+...
+
+Checking Jenkins Service...
+Jenkins Service: RUNNING
+
+Health check completed.
+Report saved to: health_report_20260802_223000.log
+Step 6: Verify the Log File
+
+List the log:
+
+ls -lh *.log
+
+View it:
+
+cat health_report_20260802_223000.log
+Step 7: Check the Exit Code
+
+Immediately after running the script:
+
+echo $?
+
+Possible results:
+
+0
+
+means Jenkins is running.
+
+or
+
+1
+
+means Jenkins is not running.
+
+Real-Time Production Scenario
+
+Imagine it's 2:00 AM, and monitoring reports:
+
+"Jenkins is down."
+
+Instead of logging in and checking everything manually, your script can quickly tell you:
+
+Server hostname
+Uptime
+CPU load
+Memory usage
+Disk usage
+Jenkins service status
+Top CPU-consuming processes
+
+This reduces troubleshooting time and provides consistent information.
+
+Production Improvements
+
+After you're comfortable with the basic version, you can extend it by adding:
+
+Check whether disk usage exceeds 80% and print a warning.
+Check whether memory usage exceeds a threshold.
+Verify internet connectivity.
+Check whether port 8080 (Jenkins) is listening.
+Save logs to /var/log/health-check/.
+Send the report by email or Slack (in environments where those tools are configured).
+Schedule the script with cron to run automatically every morning.
+Interview Questions
+Q1. Why use a shell script instead of running commands manually?
+
+Answer: It automates repetitive tasks, reduces human error, ensures consistent execution, and saves time.
+
+Q2. Why do you use tee?
+
+Answer: tee displays output on the terminal and writes the same output to a file simultaneously.
+
+Example:
+
+echo "Hello" | tee output.txt
+Q3. Why use systemctl is-active --quiet?
+
+Answer: It checks whether a service is running without printing extra output, making it useful in scripts.
+
+Q4. Why return an exit code?
+
+Answer: Other tools, such as Jenkins or monitoring systems, use the exit code to determine whether the script succeeded (0) or failed (non-zero).
+
+Mini Project Challenge
+
+Once you've completed the script:
+
+Run it on your Linux server.
+Verify that the log file is created.
+Stop Jenkins (if it's safe to do so in your lab environment), run the script again, and observe that it returns a non-zero exit code.
+Start Jenkins again and confirm the exit code returns to 0.

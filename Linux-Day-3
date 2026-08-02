@@ -1,0 +1,327 @@
+Week 1 – Day 3 Learning Objectives
+
+By the end of today, you will be able to:
+
+✅ Understand Linux processes
+✅ Monitor CPU and memory usage
+✅ Manage foreground and background jobs
+✅ Stop and kill processes safely
+✅ Manage services using systemctl
+✅ Read system logs with journalctl
+✅ Troubleshoot CPU, memory, and disk issues
+✅ Answer common interview questions
+Step 1: What is a Process?
+
+A process is a running program.
+
+Examples:
+
+Jenkins
+Nginx
+Apache
+Java application
+Docker
+SSH service
+
+Each process has a unique PID (Process ID).
+
+Step 2: View Running Processes
+ps
+
+Shows running processes.
+
+ps
+ps -ef
+
+Shows all processes with detailed information.
+
+ps -ef
+
+Example:
+
+UID        PID  PPID CMD
+root         1     0 /sbin/init
+ec2-user  2450     1 java -jar app.jar
+jenkins   3210     1 java -jar jenkins.war
+
+Important columns:
+
+Column	Meaning
+UID	Process owner
+PID	Process ID
+PPID	Parent Process ID
+CMD	Command that started the process
+Find a specific process
+ps -ef | grep jenkins
+
+or
+
+ps -ef | grep java
+
+Real-world use: Verify whether Jenkins, Tomcat, or a Java application is running.
+
+Step 3: Monitor the System
+top
+
+Shows live CPU, memory, and process usage.
+
+top
+
+Useful keys inside top:
+
+P → Sort by CPU usage
+M → Sort by memory usage
+q → Quit
+htop
+
+A more user-friendly version of top (may need installation).
+
+htop
+
+If not installed:
+
+sudo dnf install htop -y
+Step 4: Background and Foreground Jobs
+
+Run a command in the background:
+
+sleep 300 &
+
+List background jobs:
+
+jobs
+
+Bring a job to the foreground:
+
+fg %1
+
+Stop the foreground job:
+
+Press:
+
+Ctrl + C
+
+Suspend a foreground job:
+
+Ctrl + Z
+
+Resume it in the background:
+
+bg %1
+Step 5: Kill Processes
+
+Find the process:
+
+ps -ef | grep java
+
+Terminate gracefully:
+
+kill <PID>
+
+Example:
+
+kill 2450
+
+Force terminate (only if needed):
+
+kill -9 2450
+Difference
+kill → Sends SIGTERM (allows the application to shut down cleanly).
+kill -9 → Sends SIGKILL (immediately stops the process and cannot be ignored).
+
+Best practice: Use kill first. Use kill -9 only if the process does not stop.
+
+Step 6: Service Management (systemctl)
+
+Check service status:
+
+systemctl status jenkins
+
+Start a service:
+
+sudo systemctl start jenkins
+
+Stop a service:
+
+sudo systemctl stop jenkins
+
+Restart a service:
+
+sudo systemctl restart jenkins
+
+Reload configuration (if supported):
+
+sudo systemctl reload nginx
+
+Enable a service at boot:
+
+sudo systemctl enable jenkins
+
+Disable automatic startup:
+
+sudo systemctl disable jenkins
+Step 7: Read Logs with journalctl
+
+Show logs for Jenkins:
+
+journalctl -u jenkins
+
+Show the latest logs:
+
+journalctl -u jenkins -n 50
+
+Follow logs in real time:
+
+journalctl -u jenkins -f
+
+View today's logs:
+
+journalctl --since today
+Step 8: CPU, Memory, and Disk Troubleshooting
+CPU Usage
+top
+
+or
+
+ps -eo pid,comm,%cpu --sort=-%cpu | head
+
+Find the processes using the most CPU.
+
+Memory Usage
+free -h
+
+Check the biggest memory consumers:
+
+ps -eo pid,comm,%mem --sort=-%mem | head
+Disk Usage
+
+Filesystem usage:
+
+df -h
+
+Large directories:
+
+du -sh /var/*
+Real-Time Production Scenario 1
+Jenkins service is down.
+
+Symptoms:
+
+Web UI does not open.
+Pipeline fails.
+
+Troubleshooting:
+
+systemctl status jenkins
+
+Check logs:
+
+journalctl -u jenkins -n 100
+
+Common causes:
+
+Java not installed or incorrect version.
+Port already in use.
+Low disk space.
+Configuration error.
+Real-Time Production Scenario 2
+Server CPU reaches 100%.
+
+Check:
+
+top
+
+Identify the process.
+
+If it's a Java application, investigate why it's consuming CPU before restarting or terminating it.
+
+Real-Time Production Scenario 3
+Server runs out of disk space.
+
+Check:
+
+df -h
+
+Find large directories:
+
+du -sh /var/*
+
+Look for:
+
+Large log files.
+Old backups.
+Temporary files.
+Jenkins workspace growth.
+Hands-on Lab
+Check all running processes:
+ps -ef
+Search for SSH:
+ps -ef | grep ssh
+View CPU and memory:
+top
+Check memory:
+free -h
+Check disk:
+df -h
+Create a background job:
+sleep 120 &
+jobs
+Find the sleep process:
+ps -ef | grep sleep
+Stop it gracefully:
+kill <PID>
+Check the SSH service:
+systemctl status sshd
+View recent SSH logs:
+journalctl -u sshd -n 20
+Interview Questions
+Q1. What is the difference between ps and top?
+
+Answer:
+
+ps provides a snapshot of current processes.
+top shows a live, continuously updating view of system activity.
+Q2. What is a PID?
+
+Answer: PID (Process ID) is the unique identifier assigned to each running process.
+
+Q3. What is the difference between kill and kill -9?
+
+Answer:
+
+kill sends SIGTERM, allowing the application to exit gracefully.
+kill -9 sends SIGKILL, which immediately terminates the process.
+Q4. How do you check if Jenkins is running?
+systemctl status jenkins
+
+or
+
+ps -ef | grep jenkins
+Q5. How do you troubleshoot a service that won't start?
+
+A typical approach:
+
+Check service status with systemctl status.
+Review logs using journalctl.
+Verify configuration files.
+Check dependencies (for example, Java for Jenkins).
+Ensure required ports and disk space are available.
+Homework
+
+Practice these commands until you can explain and use them confidently:
+
+ps
+ps -ef
+grep
+top
+htop
+jobs
+fg
+bg
+kill
+kill -9
+systemctl
+journalctl
+free -h
+df -h
+du -sh

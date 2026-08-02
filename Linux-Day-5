@@ -1,0 +1,335 @@
+Week 1 – Day 5 Learning Objectives
+
+You will learn:
+
+✅ What is Shell Scripting?
+✅ Variables
+✅ User Input
+✅ Conditional Statements (if, elif, else)
+✅ Loops (for, while)
+✅ Functions
+✅ Exit Codes
+✅ Automating Linux Tasks
+✅ Jenkins Integration
+✅ Real Production Scenarios
+✅ Interview Questions
+Step 1: What is Shell Scripting?
+
+A Shell Script is a text file containing Linux commands that are executed one after another.
+
+Instead of typing the same commands every day, you write them once in a script and run the script whenever needed.
+
+Without a Script
+
+Every day you manually run:
+
+df -h
+free -h
+uptime
+systemctl status jenkins
+With a Script
+
+You run only:
+
+./health-check.sh
+
+The script performs all the commands automatically.
+
+Step 2: Create Your First Script
+
+Create a file:
+
+touch hello.sh
+
+Edit it:
+
+vi hello.sh
+
+Add:
+
+#!/bin/bash
+
+echo "Hello DevOps"
+echo "Welcome to Shell Scripting"
+
+Save and exit.
+
+Make it executable:
+
+chmod +x hello.sh
+
+Run it:
+
+./hello.sh
+
+Output:
+
+Hello DevOps
+Welcome to Shell Scripting
+Step 3: Variables
+
+Variables store values.
+
+Example:
+
+#!/bin/bash
+
+NAME="Sunil"
+
+echo "Welcome $NAME"
+
+Output:
+
+Welcome Sunil
+Step 4: User Input
+
+Read input from the keyboard:
+
+#!/bin/bash
+
+echo "Enter your name:"
+read NAME
+
+echo "Hello $NAME"
+
+Example:
+
+Enter your name:
+Sunil
+Hello Sunil
+Step 5: Conditional Statements
+#!/bin/bash
+
+echo "Enter a number:"
+read NUM
+
+if [ "$NUM" -gt 10 ]; then
+    echo "Greater than 10"
+else
+    echo "10 or less"
+fi
+Step 6: Multiple Conditions
+#!/bin/bash
+
+read MARKS
+
+if [ "$MARKS" -ge 90 ]; then
+    echo "Grade A"
+elif [ "$MARKS" -ge 75 ]; then
+    echo "Grade B"
+else
+    echo "Grade C"
+fi
+Step 7: for Loop
+#!/bin/bash
+
+for i in 1 2 3 4 5
+do
+    echo "Number: $i"
+done
+
+Output:
+
+Number: 1
+Number: 2
+Number: 3
+Number: 4
+Number: 5
+Step 8: while Loop
+#!/bin/bash
+
+COUNT=1
+
+while [ "$COUNT" -le 5 ]
+do
+    echo "$COUNT"
+    COUNT=$((COUNT + 1))
+done
+Step 9: Functions
+#!/bin/bash
+
+greet() {
+    echo "Welcome to DevOps"
+}
+
+greet
+Step 10: Exit Codes
+
+Every Linux command returns an exit status.
+
+Check it:
+
+ls
+echo $?
+0 → Success
+Non-zero → Error
+
+Example:
+
+ls /notfound
+echo $?
+
+Output:
+
+2
+
+This is very useful in automation and Jenkins pipelines.
+
+Step 11: Real DevOps Script – Server Health Check
+
+Create health-check.sh:
+
+#!/bin/bash
+
+echo "===== Server Health Report ====="
+
+echo "Hostname:"
+hostname
+
+echo
+echo "Uptime:"
+uptime
+
+echo
+echo "Disk Usage:"
+df -h
+
+echo
+echo "Memory Usage:"
+free -h
+
+echo
+echo "Top 5 CPU Processes:"
+ps -eo pid,comm,%cpu --sort=-%cpu | head -6
+
+echo
+echo "Jenkins Status:"
+systemctl status jenkins --no-pager
+
+Make it executable:
+
+chmod +x health-check.sh
+
+Run:
+
+./health-check.sh
+Step 12: Jenkins Integration
+
+In Jenkins, add a Build Step:
+
+Execute shell
+
+Example:
+
+#!/bin/bash
+
+echo "Starting Build"
+
+mvn clean package
+
+echo "Build Completed"
+
+When the Jenkins job runs, it executes the shell script automatically.
+
+Real-Time Production Scenario 1
+Daily Health Check
+
+Instead of manually checking:
+
+Disk space
+Memory
+CPU
+Jenkins status
+
+A script runs automatically every morning (often via cron) and sends the report to the team.
+
+Real-Time Production Scenario 2
+Backup Automation
+
+A shell script:
+
+Creates a backup.
+Compresses it.
+Copies it to another server or cloud storage.
+Removes old backups.
+Logs success or failure.
+Real-Time Production Scenario 3
+Jenkins Deployment Script
+
+A pipeline executes a shell script that:
+
+Stops the application.
+Copies the new WAR/JAR file.
+Starts the application.
+Verifies that the service is running.
+Reports success or failure.
+Hands-on Lab
+
+Create these scripts:
+
+Lab 1
+
+hello.sh
+
+Print a welcome message.
+Lab 2
+
+userinfo.sh
+
+Ask for the user's name.
+Print a personalized greeting.
+Lab 3
+
+check-number.sh
+
+Read a number.
+Print whether it is greater than 10.
+Lab 4
+
+loop.sh
+
+Print numbers 1 to 10 using a loop.
+Lab 5
+
+health-check.sh
+
+Show hostname.
+Show uptime.
+Show memory.
+Show disk usage.
+Show the top CPU-consuming processes.
+Interview Questions (3–5 Years)
+Q1. What is a shell script?
+
+Answer: A shell script is a text file containing Linux commands that are executed sequentially by a shell such as Bash to automate tasks.
+
+Q2. What is the purpose of #!/bin/bash?
+
+Answer: It is called a shebang. It tells the operating system to execute the script using the Bash shell.
+
+Q3. How do you make a shell script executable?
+chmod +x script.sh
+Q4. What is the meaning of $??
+
+Answer: It stores the exit status of the last executed command. 0 means success; any non-zero value indicates an error.
+
+Q5. How is shell scripting used in Jenkins?
+
+Answer: Jenkins executes shell scripts during pipeline stages to automate builds, testing, deployments, backups, health checks, and other administrative tasks.
+
+Homework
+
+Practice these commands and concepts until you can explain them without looking at notes:
+
+#!/bin/bash
+echo
+read
+if
+elif
+else
+for
+while
+function
+$?
+chmod +x
+./script.sh

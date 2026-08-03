@@ -1,0 +1,300 @@
+Excellent. Since you're starting from zero Docker experience, we'll build a strong foundation. By the end of Day 1, you should understand what Docker is, why it exists, how it works, and how to run your first container.
+
+Docker Learning Journey – Phase 1 (Week 1)
+Day 1 – Docker Fundamentals
+Today's Goal
+
+By the end of today, you should be able to answer:
+
+What is Docker?
+Why do we need Docker?
+What problems does Docker solve?
+What is the difference between a Virtual Machine and a Container?
+What is a Docker Image?
+What is a Docker Container?
+What is Docker Engine?
+What is Docker Hub?
+What is a Docker Registry?
+How do you install Docker?
+How do you run your first container?
+1. What is Docker?
+Interview Answer (Simple)
+
+Docker is an open-source platform that packages an application along with all its dependencies into a lightweight container. This ensures the application runs consistently across different environments, such as a developer's laptop, a test server, and production.
+
+Real-World Example
+
+Imagine you developed a Java application on your laptop.
+
+It works perfectly.
+
+You send it to the testing team.
+
+They say:
+
+"It doesn't work."
+
+Why?
+
+Because their server has:
+
+Different Java version
+Different libraries
+Different operating system settings
+
+Docker solves this by packaging everything the application needs into one container.
+
+Wherever the container runs, it behaves the same way.
+
+2. Why Docker?
+
+Without Docker:
+
+Developer PC
+
+Ubuntu
+Java 17
+Python
+MySQL
+
+↓
+
+Testing Server
+
+Ubuntu
+Java 11
+
+↓
+
+Application fails
+
+With Docker:
+
+Developer
+
+Docker Image
+
+↓
+
+Testing
+
+Same Docker Image
+
+↓
+
+Production
+
+Same Docker Image
+
+Everything works
+
+This is why people say:
+
+"It works on my machine" is no longer an excuse with Docker.
+
+3. What Problem Does Docker Solve?
+
+Docker helps with:
+
+Dependency conflicts
+Environment differences
+Faster deployments
+Easier scaling
+Better resource utilization
+Portability across environments
+4. What is a Container?
+
+A container is a running instance of a Docker image.
+
+Think of it like this:
+
+Image  --->  Container
+
+Blueprint ---> House
+
+Recipe -----> Cooked Food
+
+Class ------> Object
+Interview Answer
+
+A Docker container is a lightweight, isolated environment that runs an application and all of its dependencies.
+
+5. What is a Docker Image?
+
+An image is a read-only template used to create containers.
+
+Example:
+
+ubuntu image
+
+↓
+
+docker run ubuntu
+
+↓
+
+Ubuntu Container
+
+You can create many containers from the same image.
+
+6. Docker Architecture
+             Docker Hub
+                  ↑
+                  |
+           Pull / Push Images
+                  |
+        -----------------------
+        |    Docker Engine    |
+        -----------------------
+             |           |
+        Container 1   Container 2
+Components
+Docker Client: where you type Docker commands.
+Docker Engine (Daemon): performs the requested operations.
+Docker Hub: stores Docker images.
+Docker Registry: a repository for images (Docker Hub is a public registry).
+7. Docker vs Virtual Machine
+Virtual Machine	Docker Container
+Full OS	Shares host OS kernel
+Heavy	Lightweight
+Boots in minutes	Starts in seconds
+Higher memory usage	Lower memory usage
+Larger disk size	Smaller images
+Hypervisor required	Docker Engine required
+Example
+
+A VM is like renting an entire apartment.
+
+A Docker container is like renting one furnished room in a shared building. You get your own private space while sharing common infrastructure.
+
+8. Install Docker on Ubuntu
+
+Update packages:
+
+sudo apt update
+
+Install Docker:
+
+sudo apt install docker.io -y
+
+Start Docker:
+
+sudo systemctl start docker
+
+Enable Docker on boot:
+
+sudo systemctl enable docker
+
+Check status:
+
+sudo systemctl status docker
+9. Verify Docker Installation
+
+Check Docker version:
+
+docker --version
+
+Expected output (version number may differ):
+
+Docker version 28.x.x
+
+Detailed information:
+
+docker info
+10. Your First Docker Command
+
+Run the official test container:
+
+docker run hello-world
+
+What happens?
+
+Docker checks whether the hello-world image exists locally.
+If not, it downloads the image from Docker Hub.
+Docker creates a container from the image.
+The container runs, prints a success message, and exits.
+
+This demonstrates the basic Docker workflow:
+
+docker run hello-world
+
+↓
+
+Download Image
+
+↓
+
+Create Container
+
+↓
+
+Run Container
+
+↓
+
+Display Output
+
+↓
+
+Exit
+11. Important Docker Commands
+
+View Docker version:
+
+docker --version
+
+Show Docker information:
+
+docker info
+
+List downloaded images:
+
+docker images
+
+List running containers:
+
+docker ps
+
+List all containers:
+
+docker ps -a
+12. Mini Hands-on Lab
+
+Complete these tasks:
+
+Install Docker.
+Verify the installation.
+Run hello-world.
+List all downloaded images.
+List all containers.
+Identify whether the hello-world container is running or exited.
+13. Interview Questions
+
+Be prepared to answer:
+
+What is Docker?
+Why is Docker used?
+What problem does Docker solve?
+What is a Docker image?
+What is a Docker container?
+What is Docker Hub?
+What is the difference between Docker Hub and a Docker Registry?
+Explain Docker architecture.
+Compare Docker containers with Virtual Machines.
+What happens internally when you run docker run hello-world?
+Assignment
+
+On your Ubuntu VM, execute the following commands one by one and understand their output:
+
+sudo apt update
+sudo apt install docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo systemctl status docker
+
+docker --version
+docker info
+docker run hello-world
+docker images
+docker ps
+docker ps -a

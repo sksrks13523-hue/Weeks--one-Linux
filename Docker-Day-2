@@ -1,0 +1,59 @@
+1. download the script
+#
+#   $ curl -fsSL https://get.docker.com -o install-docker.sh
+#
+# 2. verify the script's content
+#
+#   $ cat install-docker.sh
+#
+# 3. run the script with --dry-run to verify the steps it executes
+#
+#   $ sh install-docker.sh --dry-run
+#
+# 4. run the script either as root, or using sudo to perform the installation.
+#
+#   $ sudo sh install-docker.sh
+
+1  curl -fsSL https://get.docker.com -o install-docker.sh
+    2  ls
+    3  sh install-docker.sh
+    4  sudo sh install-docker.sh
+    5  docker -v
+    6  docker pull nginx
+    7  systemctl ststaus nginx
+    8  systemctl status nginx
+    9  docker run nginx
+   10  docker run -p 80:80 nginx
+   11  docker ps -a
+   12  history
+   13  docker run --name sunilwebserver -p 80:80 nginx
+   14  docker ps -a
+   15  docker start d2105027ea59
+   16  docker ps -a
+   17  docker start d2105027ea59
+   18  docker ps
+   19  docker run --name sunilwebserver2 -d -p 80:80 nginx
+   20  docker ps
+   21  docker rm d2105027ea59
+   22  docker rm -f d2105027ea59
+   23  docker ps
+   24  docker run --name sunilwebserver2 -d -p 80:80 nginx
+   25  docker ps
+   26  docker ps -a
+   27  docker start d1cd9f5dfa03
+   28  docker ps
+   29  mkdir -p ~/docker-nginx/html
+   30  cd ~/docker-nginx/html
+   31  vi index.html
+   32  history
+   33  docker ps
+   34  docker ps -a
+   35  docker rm -f d1cd9f5dfa03
+   36  docker ps
+   37  docker run --name docker-nginx -p 80:80 -d -v ~/docker-nginx/html:/usr/share/nginx/html nginx
+   38  ls
+   39  vi index.html
+   40  history
+
+ 1  cat /var/jenkins_home/secrets/initialAdminPassword
+    2  history

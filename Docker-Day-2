@@ -57,3 +57,351 @@
 
  1  cat /var/jenkins_home/secrets/initialAdminPassword
     2  history
+
+Docker Fundamentals – Week 1
+Day 2 – Docker Images, Containers & Docker Hub
+🎯 Today's Goal
+
+By the end of today, you'll be able to:
+
+✅ Understand Docker Images
+✅ Understand Docker Containers
+✅ Pull images from Docker Hub
+✅ Run Ubuntu and Nginx containers
+✅ Access a container interactively
+✅ Understand the container lifecycle
+✅ Answer common interview questions
+1. What is a Docker Image?
+
+A Docker image is a read-only template that contains everything needed to run an application:
+
+Application code
+Runtime
+Libraries
+Dependencies
+Configuration
+
+Think of it like this:
+
+Recipe (Image)
+      ↓
+Cook the recipe
+      ↓
+Prepared Dish (Container)
+
+One image can create many containers.
+
+Example:
+
+Ubuntu Image
+      ↓
+Container 1
+
+Ubuntu Image
+      ↓
+Container 2
+
+Ubuntu Image
+      ↓
+Container 3
+2. What is a Docker Container?
+
+A container is a running instance of an image.
+
+For example:
+
+Image
+Ubuntu
+
+↓
+
+docker run ubuntu
+
+↓
+
+Ubuntu Container
+
+A container is isolated from other containers but shares the host's operating system kernel.
+
+3. What is Docker Hub?
+
+Docker Hub is the public repository where Docker images are stored.
+
+Examples of official images:
+
+ubuntu
+nginx
+mysql
+redis
+alpine
+node
+python
+tomcat
+
+You don't need to create these images yourself—you can download them.
+
+4. Pull Your First Image
+
+Download the Ubuntu image:
+
+docker pull ubuntu
+
+Expected output:
+
+Using default tag: latest
+
+latest: Pulling from library/ubuntu
+
+Downloaded newer image for ubuntu:latest
+
+List downloaded images:
+
+docker images
+
+Example output:
+
+REPOSITORY   TAG      IMAGE ID       CREATED      SIZE
+
+ubuntu       latest   xxxxxxxxx      2 weeks ago  78MB
+5. Run an Ubuntu Container
+docker run ubuntu
+
+What happens?
+
+Docker creates a container.
+The container has no long-running process.
+It exits immediately.
+
+Check:
+
+docker ps
+
+You'll probably see no running containers.
+
+Now check all containers:
+
+docker ps -a
+
+Example:
+
+CONTAINER ID
+
+STATUS
+
+Exited (0)
+6. Run Ubuntu Interactively
+
+Start an interactive shell:
+
+docker run -it ubuntu bash
+
+You'll see:
+
+root@container_id:/#
+
+Now you're inside the container.
+
+Try these commands:
+
+pwd
+ls
+whoami
+hostname
+cat /etc/os-release
+
+Exit the container:
+
+exit
+7. Download and Run Nginx
+
+Pull the image:
+
+docker pull nginx
+
+Run it in the background:
+
+docker run -d nginx
+
+The output is a long container ID.
+
+Check running containers:
+
+docker ps
+
+Example:
+
+CONTAINER ID
+
+IMAGE
+
+STATUS
+
+PORTS
+
+The Nginx container keeps running because its web server process stays active.
+
+8. Give Your Container a Name
+
+Instead of using the container ID:
+
+docker run -d --name webserver nginx
+
+Check:
+
+docker ps
+
+Now you'll see:
+
+NAMES
+
+webserver
+
+This makes container management much easier.
+
+9. Container Lifecycle
+docker run
+      ↓
+Created
+      ↓
+Running
+      ↓
+Stopped
+      ↓
+Removed
+
+Useful commands:
+
+Start:
+
+docker start webserver
+
+Stop:
+
+docker stop webserver
+
+Restart:
+
+docker restart webserver
+
+Remove:
+
+docker rm webserver
+10. Enter a Running Container
+
+Open a shell inside the Nginx container:
+
+docker exec -it webserver bash
+
+If bash isn't available:
+
+docker exec -it webserver sh
+
+Inside the container, try:
+
+pwd
+ls
+hostname
+ps
+
+Exit:
+
+exit
+11. View Container Logs
+
+Check what a container is doing:
+
+docker logs webserver
+
+Follow logs in real time:
+
+docker logs -f webserver
+
+This is a common troubleshooting step in interviews and production.
+
+12. Inspect a Container
+
+See detailed configuration:
+
+docker inspect webserver
+
+This includes:
+
+IP address
+Network settings
+Mounted volumes
+Environment variables
+Image details
+13. Summary of Important Commands
+Command	Purpose
+docker pull ubuntu	Download Ubuntu image
+docker images	List images
+docker run ubuntu	Create and run a container
+docker run -it ubuntu bash	Interactive Ubuntu shell
+docker pull nginx	Download Nginx
+docker run -d --name webserver nginx	Run Nginx in background
+docker ps	Running containers
+docker ps -a	All containers
+docker stop webserver	Stop container
+docker start webserver	Start container
+docker restart webserver	Restart container
+docker exec -it webserver bash	Enter running container
+docker logs webserver	View logs
+docker inspect webserver	Detailed container information
+Real-World Scenario
+
+Imagine an application team says:
+
+"Our website is down."
+
+As a DevOps engineer, your first checks might be:
+
+docker ps
+docker logs webserver
+docker inspect webserver
+docker exec -it webserver bash
+
+These commands help you determine whether the container is running, whether the application inside it has errors, and how it is configured.
+
+Interview Questions
+
+Prepare to answer these confidently:
+
+What is the difference between a Docker image and a container?
+What is Docker Hub?
+What happens when you run docker run ubuntu?
+Why does docker run ubuntu exit immediately?
+What is the purpose of the -it option?
+What does the -d option do?
+What is the difference between docker ps and docker ps -a?
+How do you enter a running container?
+How do you check container logs?
+How do you inspect a container's configuration?
+📝 Day 2 Hands-on Lab
+
+Complete these tasks in order:
+
+Pull the ubuntu image.
+Pull the nginx image.
+List all downloaded images.
+
+Run an Ubuntu container interactively and execute:
+
+pwd
+whoami
+hostname
+cat /etc/os-release
+Exit the Ubuntu container.
+Run an Nginx container in the background with the name webserver.
+Verify it's running with docker ps.
+View its logs.
+Enter the running container using docker exec.
+Stop and then start the container again.
+🎯 Assignment
+
+After completing the lab, send me the output of these commands:
+
+docker images
+docker ps
+docker ps -a
+docker logs webserver
+docker inspect webserver

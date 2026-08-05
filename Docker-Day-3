@@ -1,0 +1,24 @@
+1  curl -fsSL https://get.docker.com -o install-docker.sh
+    2  sudo sh install-docker.sh
+    3  docker -v
+    4  ls
+    5  FROM ubuntu
+    6  vi Dockerfile
+    7  cat Dockerfile
+    8  ls
+    9  docker images
+   10  docker build -t sunil44 .
+   11  docker images
+   12  docker tag ce739d5f1540 sunil651155/Dockerfile:latest
+   13  docker tag ce739d5f1540 sunil651155/sunil44:latest
+   14  docker images
+   15  docker login
+   16  docker images
+   17  docker push  sunil651155/sunil44:latest
+   18  docker tag ce739d5f1540 sunil651155/sunil44:latest
+   19  docker images
+   20  docker login
+   21  docker push  sunil651155/sunil44:latest
+   22  docker pull  sunil651155/sunil44
+   23  ls
+   24  history

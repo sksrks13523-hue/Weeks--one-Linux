@@ -298,3 +298,82 @@ docker run hello-world
 docker images
 docker ps
 docker ps -a
+
+1  ping google.com
+    2  sudo apt update
+    3  docker -v
+    4  docker --version
+    5  sudo apt install docker.io -y
+    6  systemctl status docker
+    7  systemctl start docker
+    8  systemctl enable docker
+    9  systemctl status docker
+   10  docker --version
+   11  docker ps
+   12  sudo docker pull nginx
+   13  sudo docker images
+   14  sudo docker run -d -p 8080:80 nginx
+   15  docker ps
+   16  sudo docker ps
+   17  sudo docker top c98d84e5ac57
+   18  sudo docker ps
+   19  docker stop c98d84e5ac57
+   20  docker ps
+   21  docker images
+   22  docker start 8541484afbc9
+   23  docker start nginx
+   24  sudo docker run -d -p 8080:80 nginx
+   25  docker ps
+   26  cd ~
+   27  mkdir docker-project1
+   28  cd docker-project1
+   29  ls
+   30  pwd
+   31  index.html
+   32  touch index.html
+   33  ls
+   34  vi indx.html
+   35  cat index.html
+   36  cat indx.html
+   37  histor
+   38  history
+   39  docker ps
+   40  docker stop dd06187feba2
+   41  docker rm dd06187feba2
+   42  docker images
+   43  docker ps -a
+   44  docker run -d -p 8080:80 -v $(pwd):/usr/share/nginx/html --name mywebsite nginx
+   45  ps
+   46  docker ps
+   47  docker inspect mywebsite
+   48  docker run -d -p 8080:80 -v $(pwd):/usr/share/nginx/indx --name mywebsite nginx
+   49  docker images
+   50  docker ps -a
+   51  docker stop c98d84e5ac57
+   52  docker rm c98d84e5ac57
+   53  docker ps -a
+   54  docker inspect mywebsite
+   55  cd /root/docker-project1
+   56  ls -l
+   57  rm index.html
+   58  ls
+   59  cat indx.html
+   60  ls
+   61  cp indx.html index.html
+   62  ls
+   63  rm indx.html
+   64  ls
+   65  cat index.html
+   66  history
+   67  docker ps
+   68  docker logs
+   69  docker log
+   70  docker logs
+   71  ~
+   72  cd ~
+   73  docker logs
+   74  cd /var/logs
+   75  cd /var
+   76  ls
+   77  log
+   78  history

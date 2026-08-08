@@ -1,0 +1,668 @@
+🚀 Project 1 — Docker + Nginx Production Website
+Final architecture
+                    Internet
+                       |
+                       | HTTP :8080
+                       v
+              +------------------+
+              |   GCP Ubuntu VM  |
+              |                  |
+              |  Docker Engine   |
+              |       |          |
+              |       v          |
+              |  +-----------+   |
+              |  |   Nginx   |   |
+              |  | Container |   |
+              |  +-----------+   |
+              |       |          |
+              |       v          |
+              |   Website Files  |
+              +------------------+
+                       |
+                       v
+              http://SERVER-IP:8080
+🎯 What you'll learn today
+
+By the end of Day 1, you'll understand:
+
+Docker installation
+Docker architecture
+Docker images
+Docker containers
+Nginx
+Port mapping
+Running a website inside Docker
+Container troubleshooting
+Basic production commands
+Step 0 — Connect to your GCP Ubuntu server
+
+You already used PuTTY previously.
+
+Connect using:
+
+Host Name: YOUR_GCP_EXTERNAL_IP
+Port: 22
+Connection: SSH
+
+Login with your Ubuntu username.
+
+Then verify:
+
+whoami
+
+You should see something like:
+
+sunil
+
+Check OS:
+
+cat /etc/os-release
+
+You should see Ubuntu information.
+
+Check server:
+
+hostname
+
+And:
+
+uptime
+Step 1 — Update Ubuntu
+
+Run:
+
+sudo apt update
+
+Then:
+
+sudo apt upgrade -y
+
+This may take a few minutes.
+
+Verify:
+
+sudo apt update
+
+You should see that package information is up to date.
+
+Step 2 — Check whether Docker is already installed
+
+Run:
+
+docker --version
+
+If you get:
+
+Command 'docker' not found
+
+that's okay.
+
+Also check:
+
+docker ps
+
+If Docker isn't installed, we'll install it.
+
+Step 3 — Install Docker
+
+For this lab, install Docker using Ubuntu's Docker package:
+
+sudo apt install docker.io -y
+
+After installation:
+
+docker --version
+
+You should get something similar to:
+
+Docker version 28.x.x
+
+The exact version can differ.
+
+Step 4 — Start Docker
+
+Run:
+
+sudo systemctl start docker
+
+Enable Docker at boot:
+
+sudo systemctl enable docker
+
+Check:
+
+sudo systemctl status docker
+
+You want:
+
+Active: active (running)
+
+Press:
+
+q
+
+to exit the status screen.
+
+Step 5 — Test Docker
+
+Run:
+
+sudo docker run hello-world
+
+Docker will:
+
+Docker Client
+     |
+     v
+Docker Engine
+     |
+     v
+Docker Hub
+     |
+     v
+hello-world image
+     |
+     v
+Container
+
+You should see:
+
+Hello from Docker!
+
+🎉 Your Docker engine is working.
+
+Step 6 — Avoid typing sudo every time
+
+Currently you may need:
+
+sudo docker ps
+
+We can allow your Ubuntu user to use Docker.
+
+Run:
+
+sudo usermod -aG docker $USER
+
+Then:
+
+newgrp docker
+
+Now test:
+
+docker ps
+
+If it works without sudo, you're ready.
+
+Verify:
+
+docker info
+Step 7 — Download Nginx
+
+Now we enter the actual project.
+
+Run:
+
+docker pull nginx:alpine
+
+You'll see Docker downloading the Nginx image.
+
+Why nginx:alpine?
+
+nginx
+  +
+Alpine Linux
+  =
+small Docker image
+
+This is useful for production because smaller images generally mean less storage and faster image transfers.
+
+Check the image:
+
+docker images
+
+You should see something similar to:
+
+REPOSITORY   TAG      IMAGE ID      CREATED       SIZE
+nginx        alpine   xxxxxxxx      ...           ...
+Step 8 — Run Nginx container
+
+Now run:
+
+docker run -d --name production-web -p 8080:80 nginx:alpine
+
+Understand this carefully:
+
+docker run
+   |
+   +-- -d
+   |     Background mode
+   |
+   +-- --name production-web
+   |     Container name
+   |
+   +-- -p 8080:80
+   |     Host port : Container port
+   |
+   +-- nginx:alpine
+         Docker image
+
+The important part is:
+
+-p 8080:80
+
+Meaning:
+
+GCP Server
+Port 8080
+     |
+     v
+Docker Container
+Port 80
+     |
+     v
+Nginx
+Step 9 — Check the container
+
+Run:
+
+docker ps
+
+You should see:
+
+CONTAINER ID
+IMAGE
+COMMAND
+STATUS
+PORTS
+NAMES
+
+Something like:
+
+xxxx   nginx:alpine   ...   Up ...   0.0.0.0:8080->80/tcp   production-web
+
+This is an important Docker interview concept.
+
+Host port
+8080
+Container port
+80
+Step 10 — Test from the server
+
+Run:
+
+curl http://localhost:8080
+
+You should receive HTML from Nginx.
+
+You can also run:
+
+curl -I http://localhost:8080
+
+Expected:
+
+HTTP/1.1 200 OK
+Server: nginx
+
+🎉 Your first containerized web server is running.
+
+Step 11 — Test from your Windows PC
+
+Open your browser.
+
+Use:
+
+http://YOUR-GCP-EXTERNAL-IP:8080
+
+For example:
+
+http://35.xxx.xxx.xxx:8080
+
+You should see the default:
+
+Welcome to nginx!
+
+⚠️ If the browser doesn't open
+
+This is a very common real-world troubleshooting scenario.
+
+Your Docker container may be perfectly healthy while GCP blocks port 8080.
+
+Go to:
+
+GCP Console → VPC Network → Firewall
+
+Create an ingress firewall rule:
+
+Name:
+allow-http-8080
+
+Direction:
+
+Ingress
+
+Targets:
+
+Your VM / appropriate network tag
+
+Source IPv4:
+
+0.0.0.0/0
+
+Protocols and ports:
+
+TCP: 8080
+
+Then test again:
+
+http://YOUR-GCP-IP:8080
+
+For a real production deployment, we would not leave broad access like this unnecessarily; we'd restrict exposure and typically put the application behind a proper load balancer/reverse proxy.
+
+🔍 Step 12 — Learn Docker troubleshooting
+
+This is where your project becomes interview-level.
+
+Check container
+docker ps
+Check all containers
+docker ps -a
+Check logs
+docker logs production-web
+Follow logs
+docker logs -f production-web
+
+Press:
+
+Ctrl + C
+Inspect container
+docker inspect production-web
+Check resource usage
+docker stats production-web
+🐳 Step 13 — Enter the container
+
+Run:
+
+docker exec -it production-web /bin/sh
+
+Now you're inside the Nginx container.
+
+Run:
+
+ls
+
+Then:
+
+cd /usr/share/nginx/html
+
+Run:
+
+ls -l
+
+You should see:
+
+50x.html
+index.html
+
+Check:
+
+cat index.html
+
+You'll see the default Nginx webpage HTML.
+
+Exit:
+
+exit
+🧪 Step 14 — Practice container lifecycle
+
+Stop it:
+
+docker stop production-web
+
+Check:
+
+docker ps
+
+It won't appear because it's stopped.
+
+Check:
+
+docker ps -a
+
+It should appear.
+
+Start it:
+
+docker start production-web
+
+Check:
+
+docker ps
+
+Restart:
+
+docker restart production-web
+🧠 Your first Docker lifecycle
+
+Remember this:
+
+             docker run
+                 |
+                 v
+             CREATED
+                 |
+                 v
+              RUNNING
+             /       \
+            /         \
+       docker stop   docker restart
+          |              |
+          v              |
+       STOPPED <---------+
+          |
+          v
+       docker rm
+          |
+          v
+       REMOVED
+🏗️ Step 15 — Create our actual project
+
+So far we've used the official Nginx image.
+
+Now we're going to build our own Docker image.
+
+Create project:
+
+mkdir -p ~/docker-project-1
+cd ~/docker-project-1
+
+Check:
+
+pwd
+
+You should have something similar to:
+
+/home/your-user/docker-project-1
+
+Create website directory:
+
+mkdir website
+
+Create HTML:
+
+nano website/index.html
+
+Paste:
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Production Docker Project</title>
+</head>
+<body>
+
+    <h1>Welcome to My Docker Production Project</h1>
+
+    <h2>Application: Company Web Portal</h2>
+
+    <p>Environment: Development</p>
+    <p>Platform: Docker + Nginx</p>
+    <p>Server: GCP Ubuntu</p>
+
+</body>
+</html>
+
+Save:
+
+CTRL + O
+ENTER
+CTRL + X
+🐳 Step 16 — Create Dockerfile
+
+Go to project directory:
+
+cd ~/docker-project-1
+
+Create:
+
+nano Dockerfile
+
+Add:
+
+FROM nginx:alpine
+
+COPY website/ /usr/share/nginx/html/
+
+EXPOSE 80
+
+Save and exit.
+
+🏗️ Step 17 — Build your own Docker image
+
+Run:
+
+docker build -t company-web:v1 .
+
+Understand:
+
+Dockerfile
+     |
+     v
+docker build
+     |
+     v
+company-web:v1
+     |
+     v
+Docker Image
+
+Check:
+
+docker images
+
+You should see:
+
+company-web   v1
+🚀 Step 18 — Run YOUR image
+
+First remove the old Nginx container:
+
+docker stop production-web
+docker rm production-web
+
+Now run your application:
+
+docker run -d \
+  --name company-web \
+  -p 8080:80 \
+  company-web:v1
+
+Check:
+
+docker ps
+
+Test:
+
+curl http://localhost:8080
+
+Then browser:
+
+http://YOUR-GCP-IP:8080
+
+You should now see your own website.
+
+🏆 What you've accomplished
+
+You have now implemented:
+
+GCP Ubuntu
+     |
+     v
+Docker Engine
+     |
+     v
+Dockerfile
+     |
+     v
+Custom Docker Image
+     |
+     v
+Docker Container
+     |
+     v
+Nginx
+     |
+     v
+Website
+     |
+     v
+Internet
+
+This is your Project 1 foundation.
+
+📋 Your Day-1 Interview Questions
+
+After completing the lab, you should be able to answer these:
+
+1. What is Docker?
+
+2. What is a Docker image?
+
+3. What is a Docker container?
+
+4. Difference between image and container?
+
+5. What does docker run do?
+
+6. What does -p 8080:80 mean?
+
+7. What is a Dockerfile?
+
+8. What is the difference between docker stop and docker rm?
+
+9. How do you troubleshoot a container that isn't working?
+
+10. How do you check container logs?
+
+11. How do you enter a running container?
+
+12. How do you check container resource consumption?
+
+🔥 Your task now
+
+Don't jump ahead.
+
+Run these commands one by one on your GCP Ubuntu server:
+
+docker --version
+docker ps
+docker run hello-world
+docker pull nginx:alpine
+docker run -d --name production-web -p 8080:80 nginx:alpine
+
+Then:
+
+docker ps
+
+and:
+
+curl -I http://localhost:8080

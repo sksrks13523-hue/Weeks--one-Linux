@@ -1,0 +1,458 @@
+🚀 Project 1 — Day 2
+Today's goal
+
+By the end of today:
+
+GCP Ubuntu
+    |
+    v
+Docker
+    |
+    +-------------------+
+    |                   |
+    v                   v
+Custom Image        Persistent Data
+    |                   |
+    v                   |
+Nginx Container <-------+
+    |
+    v
+Docker Network
+    |
+    v
+Application
+1. Check yesterday's container
+
+Run:
+
+docker ps
+
+You should have something similar to:
+
+CONTAINER ID   IMAGE          STATUS       PORTS                  NAMES
+xxxxxx         nginx:alpine   Up ...       0.0.0.0:8080->80/tcp   production-web
+
+If it's not running:
+
+docker start production-web
+
+Test:
+
+curl -I http://localhost:8080
+
+Expected:
+
+HTTP/1.1 200 OK
+2. Create our real project directory
+cd ~
+mkdir -p docker-project-1/{website,nginx,logs}
+cd docker-project-1
+
+Check:
+
+tree
+
+If tree isn't installed:
+
+ls -R
+
+You should have:
+
+docker-project-1/
+├── website/
+├── nginx/
+└── logs/
+3. Create our company website
+nano website/index.html
+
+Use:
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Company Production Portal</title>
+</head>
+
+<body>
+
+    <h1>Company Production Portal</h1>
+
+    <h2>Docker Project 1</h2>
+
+    <p>Application: Company Web Portal</p>
+    <p>Platform: Docker + Nginx</p>
+    <p>Environment: Production</p>
+
+    <hr>
+
+    <p>Application Status: <strong>Running</strong></p>
+
+</body>
+</html>
+
+Save:
+
+CTRL + O
+ENTER
+CTRL + X
+4. Create our Dockerfile
+
+From:
+
+cd ~/docker-project-1
+
+Create:
+
+nano Dockerfile
+
+Add:
+
+FROM nginx:alpine
+
+LABEL maintainer="DevOps Team"
+LABEL application="Company Web Portal"
+
+COPY website/ /usr/share/nginx/html/
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+Understand it
+FROM
+ ↓
+Base image
+
+LABEL
+ ↓
+Metadata
+
+COPY
+ ↓
+Website → Nginx
+
+EXPOSE
+ ↓
+Container port
+
+CMD
+ ↓
+Start Nginx
+5. Build your custom image
+
+Run:
+
+docker build -t company-web:v1 .
+
+Check:
+
+docker images
+
+You should see:
+
+company-web    v1
+nginx          alpine
+6. Run your custom application
+
+First remove the previous container:
+
+docker stop production-web
+docker rm production-web
+
+Now:
+
+docker run -d \
+  --name company-web \
+  -p 8080:80 \
+  company-web:v1
+
+Check:
+
+docker ps
+
+Test:
+
+curl http://localhost:8080
+
+You should see your company portal HTML.
+
+Open from your Windows browser:
+
+http://YOUR-GCP-IP:8080
+7. Production concept — container logs
+
+Check:
+
+docker logs company-web
+
+Follow logs:
+
+docker logs -f company-web
+
+Press:
+
+CTRL + C
+
+Now generate traffic:
+
+curl http://localhost:8080
+
+Then:
+
+docker logs company-web
+
+This is a basic but important production troubleshooting skill.
+
+8. Production concept — Docker volume
+
+Currently your website exists inside the container image.
+
+If the container is deleted:
+
+docker rm -f company-web
+
+the container's writable filesystem disappears.
+
+For persistent data, use a volume.
+
+Create:
+
+docker volume create company-web-data
+
+Check:
+
+docker volume ls
+
+Inspect:
+
+docker volume inspect company-web-data
+9. Use a volume with Nginx
+
+Create a test container:
+
+docker run -d \
+  --name company-web-volume \
+  -p 8081:80 \
+  -v company-web-data:/usr/share/nginx/html \
+  nginx:alpine
+
+Check:
+
+docker ps
+
+Now we have:
+
+8080 → company-web
+8081 → company-web-volume
+
+Test:
+
+curl http://localhost:8081
+10. Docker networking
+
+Create a custom network:
+
+docker network create company-network
+
+Check:
+
+docker network ls
+
+Inspect:
+
+docker network inspect company-network
+
+Now run:
+
+docker run -d \
+  --name web-server \
+  --network company-network \
+  nginx:alpine
+
+Check:
+
+docker ps
+11. Why custom Docker networks matter
+
+Imagine your organization has:
+
+Frontend
+Backend
+Database
+
+We don't want every container communicating freely.
+
+Instead:
+
+                 company-network
+                       |
+        +--------------+--------------+
+        |              |              |
+        v              v              v
+     frontend       backend        database
+
+Docker's custom network provides container-to-container communication and DNS-based service discovery.
+
+For example, one container can communicate with another using:
+
+http://backend:8080
+
+instead of hardcoding an IP address.
+
+This becomes extremely important when we reach Project 2 — Docker Compose 3-Tier Application.
+
+12. Production health check
+
+Let's add a health check.
+
+Stop/remove the current custom container:
+
+docker rm -f company-web
+
+Edit Dockerfile:
+
+nano Dockerfile
+
+Use:
+
+FROM nginx:alpine
+
+LABEL maintainer="DevOps Team"
+LABEL application="Company Web Portal"
+
+COPY website/ /usr/share/nginx/html/
+
+EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]
+
+Rebuild:
+
+docker build -t company-web:v2 .
+
+Run:
+
+docker run -d \
+  --name company-web \
+  -p 8080:80 \
+  company-web:v2
+
+Check:
+
+docker ps
+
+After a short time you should see:
+
+healthy
+
+You can also run:
+
+docker inspect --format='{{.State.Health.Status}}' company-web
+
+Expected:
+
+healthy
+🔥 13. Real production troubleshooting
+
+Now let's intentionally create failures.
+
+Scenario 1 — Container stopped
+docker stop company-web
+
+Check:
+
+docker ps
+
+Troubleshoot:
+
+docker ps -a
+
+Start:
+
+docker start company-web
+Scenario 2 — Port already in use
+
+Try:
+
+docker run -d \
+  --name test-web \
+  -p 8080:80 \
+  nginx:alpine
+
+You should get a port conflict because 8080 is already being used.
+
+Check:
+
+docker ps
+
+Find the container using port 8080.
+
+Solution:
+
+docker run -d \
+  --name test-web \
+  -p 8082:80 \
+  nginx:alpine
+
+Now:
+
+8082 → test-web
+Scenario 3 — Application not responding
+
+Check:
+
+docker ps
+
+Then:
+
+docker logs company-web
+
+Then:
+
+docker inspect company-web
+
+Then:
+
+docker exec -it company-web /bin/sh
+
+Inside:
+
+wget -qO- http://localhost
+
+If Nginx is working, you'll get HTML.
+
+Exit:
+
+exit
+🧠 Production troubleshooting flow
+
+Memorize this:
+
+Application unavailable
+        |
+        v
+docker ps
+        |
+        v
+Is container running?
+    /           \
+   NO           YES
+   |             |
+start         docker logs
+                 |
+                 v
+             docker inspect
+                 |
+                 v
+             docker exec
+                 |
+                 v
+             Check application
+                 |
+                 v
+             Check port
+                 |
+                 v
+             Check firewall

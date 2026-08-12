@@ -1,0 +1,108 @@
+1  gcloud container clusters get-credentials sunil-cluster --zone us-central1-a --project project-9c672384-c7bb-467b-8a6
+    2  kubectl get services
+    3  kubectl get nodes
+    4  ls la
+    5  ls
+    6  find ./*
+    7  kubectl ./
+    8  find kubectl
+    9  kubectl
+   10  gcloud container clusters get-credentials sunil-cluster-1 --region us-central1 --project project-9c672384-c7bb-467b-8a6
+   11  kuberctl services
+   12  kubectl status
+   13  kuberctl nodes
+   14  kubectl get nodes
+   15  kubectl nodes
+   16  gcloud container clusters get-credentials cluster-1 --region us-east1 --project project-9c672384-c7bb-467b-8a6
+   17  kubectl get nodes
+   18  kubectl get services
+   19  kubectl get nodes
+   20  kubectl get services
+   21  kubectl pod
+   22  kubectl get pod
+   23  kubectl run nginx --image=nginx:1.16
+   24  kubectl get pod
+   25  kubectl logs nginx
+   26  kubectl describe nginx
+   27  kubectl describe po nginx
+   28  kubectl get svc
+   29  kubectl get svc -w
+   30  gcloud container clusters get-credentials cluster-1 --region us-east1 --project project-9c672384-c7bb-467b-8a6
+   31  kubectl run jenkins  --image=jenkins/jenkins:lts
+   32  kubectl get svc -w
+   33  c
+   34  kubectl run jenkins  --image=jenkins/jenkins:lts
+   35  gcloud container clusters get-credentials sunil-cluster-1 --region us-east1 --project project-9c672384-c7bb-467b-8a6
+   36  kubectl get nodes
+   37  kubectl get po
+   38  kubectl run nginx --image=nginx:1.16
+   39  kubectl get po
+   40  kubectl get po -o wide
+   41  kubectl logs nginx
+   42  kubectl logs po nginx
+   43  kubectl logs nginx
+   44  kubectl describe nginx
+   45  kubectl describe po nginx
+   46  kubectl get po -o wide
+   47  kubectl get po
+   48  kubectl get po -o wide
+   49  kubectl get svc
+   50  kubectl get po
+   51  gcloud container clusters get-credentials new-cluster-1 --region us-east4 --project project-9c672384-c7bb-467b-8a6
+   52  kubectl get services
+   53  kubectl get nodes
+   54  kubctl get ns
+   55  kubectl get ns
+   56  kubectl create ns dev
+   57  kubectl get ns
+   58  apiVersion: v1
+   59  cd /C:\batch-44
+   60  C:\batch-44
+   61  cd \C:\batch-44pwd
+   62  cd batch-44
+   63  cd /c/batch-44
+   64  gcloud container clusters get-credentials cluster-1 --region us-west2 --project project-9c672384-c7bb-467b-8a6
+   65  kubuctl get nodes
+   66  kubectl get nodes
+   67  kubectl get services
+   68  kubectl run nginx --image=nginx:1.16
+   69  kubectl get pod
+   70  kubectl get po -o wide
+   71  kubectl logs nginx
+   72  kubectl discribe nginx
+   73  kubectl discribe po nginx
+   74  kubectl describe po nginx
+   75  kubectl run nginx --image=nginx:9.545
+   76  kubectl run nginx9 --image=nginx:9.545
+   77  kubectl get po
+   78  kubectl describe po nginx9
+   79  kubectl get svc
+   80  kubectl get svc -w
+   81  kubectl run jenkind --image=jenkins/jenkins:lts
+   82  kubectl get po
+   83  kubectl describe po jenkins
+   84  kubectl describe pojenkins/jenkins
+   85  kubectl po -w
+   86  kubectl get svc
+   87  kubectl get svc -w
+   88  kubectl get svc
+   89  kubectl get svc -w
+   90  kubectl get svc
+   91  kubectl get svc -w
+   92  kubectl exec -it jenkind-7lhw6 --bash
+   93  kubectl get po
+   94  kubectl exec -it jenkind --bin/bash
+   95  kubectl exec -it jenkins --bin/bash
+   96  kubectl exec -it jenkind --bin/bash
+   97  kubectl exec -it jenkind --bin/bash/
+   98  kubectl exec -it jenkins  -- bin/bash
+   99  kubectl exec -it jenkind  -- bin/bash
+  100  kubectl cluster-info
+  101  kubectl config get-context
+  102  kubectl config get-contexts
+  103  kubcctl get no
+  104  kubcctl get nodes
+  105  kubcctl get no kubectl get nodes
+  106  kubectl get nodes
+  107  kubectl get no gke-cluster-1-default-pool-138b0e0c-r0ts
+  108  history

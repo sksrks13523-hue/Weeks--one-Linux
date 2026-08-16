@@ -1,0 +1,23 @@
+ pwd
+    2  ls
+    3  apt-get update && apt install docker.io -y
+    4  docker --version
+    5  docker pull hello-world
+    6  docker images
+    7  gcloud auth login
+    8  4/0ATsMZqC0Iy7sHBP6jzdtHNXqcZS4Voi3cDj6fFA50hpti8Cb0BkBdyfWt58538ni_NgfEw
+    9  gcloud auth login
+   10  gcloud config set project project-fd1db396-6ea2-4861-a25
+   11  gcloud auth configure-docker     us-central1-docker.pkg.dev
+   12  docket images
+   13  docker images
+   14  docker tag hello-world:latest
+   15  us-central1-docker.pkg.dev/project-fd1db396-6ea2-4861-a25/sunil/hello-world:latest
+   16  docker tag hello-world:latest
+   17  us-central1-docker.pkg.dev/project-fd1db396-6ea2-4861-a25/sunil/hello-world:latest
+   18  docker images
+   19  docker tag hello-world:latest us-central1-docker.pkg.dev/project-fd1db396-6ea2-4861-a25/sunil/hello-world:latest
+   20  docket images
+   21  docker images
+   22  docker push us-central1-docker.pkg.dev/project-fd1db396-6ea2-4861-a25/sunil/hello-world:latest 
+   23  history

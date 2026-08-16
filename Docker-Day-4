@@ -21,3 +21,9 @@
    21  docker images
    22  docker push us-central1-docker.pkg.dev/project-fd1db396-6ea2-4861-a25/sunil/hello-world:latest 
    23  history
+docker network create --driver bridge my_bridge
+   25  docker network ls
+   26  docker run -dit --name app1 --network my_bridge alpine sh
+   27  docker run -dit --name app2 --network my_bridge alpine sh
+   28  docker ps
+   29  docker exec -it app1 ping app2

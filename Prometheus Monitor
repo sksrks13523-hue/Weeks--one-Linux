@@ -1,0 +1,23 @@
+kubectl get pod
+  125  kubectl get svc 
+  126  kubectl get deploy
+  127  kubectl create -f kubernetes-manifests.yaml
+  128  kubectl get pod
+  129  kubectl get svc
+  130  kubectl get deploy
+  131  gcloud container clusters get-credentials cluster-1 --region us-east5 --project project-fd1db396-6ea2-4861-a25
+  132  kubectl create ns monitor
+  133  kubectl get ns
+  134  kubectl get ns -o wide
+  135  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  136  helm repo update
+  137  helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitor
+  138  kubectl --namespace monitor get pods -l "release=kube-prometheus-stack
+  139  kubectl --namespace monitor get pods -l release=kube-prometheus-stack
+  140  kubectll get po -n monitor
+  141  kubectl get po -n monitor
+  142  kubectl get svc -n monitor
+  143  kubectl expose deployment kube-prometheus-stack-grafana --port=3000 --target-port=3000 --name=grafana --type=LoadBalancer -n monitor
+  144  kubectl get svc -n monitor
+  145  kubectl --namespace monitor get secrets kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
+  146  history
